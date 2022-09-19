@@ -1,5 +1,9 @@
 # homework 1 Time Conversion
 
+student ID: 122431910061
+
+name: Zhaohong Liu
+
 **question description**:
 
 2022/9/19 10:00 to `UTC` to `BDS` time then to `GPS` time.
