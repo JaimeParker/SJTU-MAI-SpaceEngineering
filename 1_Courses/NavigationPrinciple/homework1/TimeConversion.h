@@ -17,6 +17,8 @@ using namespace std;
 
 typedef vector< vector<int> > Vec2int;
 typedef tuple<int, int, int, int, int, double> Time;
+typedef tuple<int, int, int> TimeDay;
+typedef tuple<int, int, double> TimeSec;
 
 class TimeConversion {
 private:
@@ -53,6 +55,8 @@ public:
      */
     static Time TimeAddSubtraction(Time &time_origin, double sec, bool sign);
 
+    static TimeDay thinking(TimeDay &timeDay, int days);
+
     /**
      * judge if this year is a leap year
      * @param year
@@ -81,6 +85,8 @@ public:
      * show all time
      */
     void ShowAllTime();
+
+    static pair<int, int> getTimeWithinYear(pair<int, int> &time, int days, bool is_leap_year);
 };
 
 

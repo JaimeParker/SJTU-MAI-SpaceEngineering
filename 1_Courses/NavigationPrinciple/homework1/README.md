@@ -152,11 +152,11 @@ for `2022-9-19-10:00:00`
 
 ```shell
 $/home/hazyparker/project/SJTU-MAI-SpaceEngineering/1_Courses/NavigationPrinciple/homework1/cmake-build-debug/homework1
-  local time, 2022- 9-19, 10:0:0
-     IA time, 2022- 9-19,  9:59:27.816
-    GPS time, 2022- 9-19,  9:59:8.816
-    BDS time, 2022- 9-19,  9:58:54.816
-    UTC time, 2022- 9-19,  9:58:50.816
+  local time, 2022- 9-19,  10:0:0
+     IA time, 2022- 9-19,  1:59:27.816
+    GPS time, 2022- 9-19,  1:59:8.816
+    BDS time, 2022- 9-19,  1:58:54.816
+    UTC time, 2022- 9-19,  1:58:50.816
 ```
 
 for `2000-2-29-9:59:45`
@@ -164,10 +164,10 @@ for `2000-2-29-9:59:45`
 ```shell
 $/home/hazyparker/project/SJTU-MAI-SpaceEngineering/1_Courses/NavigationPrinciple/homework1/cmake-build-debug/homework1
   local time, 2000- 2-29,  9:59:45
-     IA time, 2000- 2-29,  9:59:12.816
-    GPS time, 2000- 2-29,  9:58:53.816
-    BDS time, 2000- 2-29,  9:58:39.816
-    UTC time, 2000- 2-29,  9:58:40.816
+     IA time, 2000- 2-29,  1:59:12.816
+    GPS time, 2000- 2-29,  1:58:53.816
+    BDS time, 2000- 2-29,  1:58:39.816
+    UTC time, 2000- 2-29,  1:58:40.816
 ```
 
 

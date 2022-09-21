@@ -6,9 +6,12 @@
 #include <iostream>
 #include <tuple>
 #include <iomanip>
+#include <vector>
+#include <utility>
 
 using namespace std;
 
+typedef pair<int, int> PairDay;
 
 TimeConversion::TimeConversion(int mYear, int mMonth, int mDay,
                                int mHour, int mMin, double mSec) {
@@ -311,4 +314,153 @@ void TimeConversion::ShowAllTime() {
     Show(bds_time);
     cout << setw(12) << "UTC time"<< ", ";
     Show(utc_time);
+}
+
+TimeDay TimeConversion::thinking(TimeDay &timeDay, int days) {
+
+    TimeDay result;
+    vector<PairDay> day_match, day_match_leap;
+
+    int curr_year = get<0>(timeDay);
+    int curr_month = get<1>(timeDay);
+    int curr_day = get<2>(timeDay);
+
+    int add_year, add_month, add_day;
+
+    day_match = {
+            {1, 31},
+            {2, 28},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    day_match_leap = {
+            {1, 31},
+            {2, 29},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    int sum_day = 0;
+    // while current year is not a leap year
+    if (!isLeapYear(curr_year)) {
+
+        // get days in total
+        int i = 0;
+        while (i + 1 < curr_month) {
+            sum_day += day_match[i].second;
+            i += 1;
+        }
+        sum_day += curr_day;
+
+        // get exactly month and day
+        if (365 - sum_day - days > 0) {
+            // which means within a year
+            pair<int, int> time;
+            time.first = curr_month;
+            time.second = curr_day;
+            time = getTimeWithinYear(time, days, false);
+            get<0>(result) = curr_year;
+            get<1>(result) = time.first;
+            get<2>(result)  =time.second;
+        }else{
+            // which means more than a year, there will be adding in `year`
+            // the next year being leap year or not need to be considered
+            // still using the cut strategy
+            int final_year = curr_year;
+            int rest_days = days;
+            while (365 - rest_days){}
+        }
+
+    }
+
+    return result;
+}
+
+pair<int, int> TimeConversion::getTimeWithinYear(pair<int, int> &time, int days, bool is_leap_year) {
+    vector<PairDay> day_match, day_match_leap;
+    day_match = {
+            {1, 31},
+            {2, 28},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    day_match_leap = {
+            {1, 31},
+            {2, 29},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    pair<int, int> result;
+
+    int month = time.first;
+    int day = time.second;
+
+    if (!is_leap_year){
+        // for normal year
+        if (day_match[month - 1].second - day > days){
+            result.first = month;
+            result.second = day + days;
+        }else{
+            days -= day_match[month - 1].second - day;
+            int i = month + 1;
+            while (days > day_match[i - 1].second){
+                days -= day_match[i - 1].second;
+                i += 1;
+            }
+            result.first = i;
+            result.second = days;
+        }
+    }else{
+        // for leap year
+        if (day_match_leap[month - 1].second - day > days){
+            result.first = month;
+            result.second = day + days;
+        }else{
+            days -= day_match_leap[month - 1].second - day;
+            int i = month + 1;
+            while (days > day_match_leap[i - 1].second){
+                days -= day_match_leap[i - 1].second;
+                i += 1;
+            }
+            result.first = i;
+            result.second = days;
+        }
+    }
+
+    return result;
 }
