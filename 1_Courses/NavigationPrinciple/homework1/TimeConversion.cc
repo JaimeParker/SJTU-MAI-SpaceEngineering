@@ -129,11 +129,17 @@ Time TimeConversion::TimeAddSubtraction(Time &time_origin, double sec, bool sign
             hour_result = hour_origin;
         }
 
+        hour_result -= 8;
+
         // get hour
         if (hour_result >= 24){
             hour_result -= 24;
             day_result = day_origin + 1;
-        }else{
+        }else if (hour_result < 0){
+            hour_result += 24;
+            day_result = day_origin - 1;
+        }
+        else{
             day_result = day_origin;
         }
 
@@ -189,6 +195,8 @@ Time TimeConversion::TimeAddSubtraction(Time &time_origin, double sec, bool sign
         }else{
             hour_result = hour_origin;
         }
+
+        hour_result -= 8;
 
         // het hour
         if (hour_result < 0){
@@ -276,15 +284,15 @@ void TimeConversion::LT2UTC() {
     }
     bias += leap_sec_vec[cor_x][cor_y] + 10;
 
-    utc_time = TimeAddSubtraction(ia_time, bias, false);
+    utc_time = TimeAddSubtractionNoZone(ia_time, bias, false);
 }
 
 void TimeConversion::LT2GPS() {
-    gps_time = TimeAddSubtraction(ia_time, 19, false);
+    gps_time = TimeAddSubtractionNoZone(ia_time, 19, false);
 }
 
 void TimeConversion::LT2BDS() {
-    bds_time = TimeAddSubtraction(ia_time, 33, false);
+    bds_time = TimeAddSubtractionNoZone(ia_time, 33, false);
 }
 
 void TimeConversion::Show(Time &time) {
@@ -463,4 +471,162 @@ pair<int, int> TimeConversion::getTimeWithinYear(pair<int, int> &time, int days,
     }
 
     return result;
+}
+
+Time TimeConversion::TimeAddSubtractionNoZone(Time &time_origin, double sec, bool sign) {
+    // send data to int and double variables for processing
+    int year_origin = get<0>(time_origin);
+    int month_origin = get<1>(time_origin);
+    int day_origin = get<2>(time_origin);
+    int hour_origin = get<3>(time_origin);
+    int min_origin = get<4>(time_origin);
+    double sec_origin = get<5>(time_origin);
+
+    Time time_result;
+    time_result = time_origin;
+    int year_result = 0, month_result, day_result, hour_result, min_result;
+    double sec_result;
+
+    /**
+     * there must be a better time add ans subtraction method
+     */
+    // add or subtract the delta time
+    if (sign){
+        // time_result = time_origin + delta
+
+        /**
+         * minus upgrade will make delta range up to 60 secs
+         * now the sun_sec can't be more than 120s
+         */
+        // get sec
+        double sum_sec = sec + sec_origin;
+        if (sum_sec >= 60.0){
+            sec_result = sum_sec - 60.0;
+            min_result = min_origin + 1;
+        }else{
+            sec_result = sum_sec;
+            min_result = min_origin;
+        }
+
+        // get min
+        if (min_result >= 60){
+            min_result -= 60;
+            hour_result = hour_origin + 1;
+        }else{
+            hour_result = hour_origin;
+        }
+
+        // get hour
+        if (hour_result >= 24){
+            hour_result -= 24;
+            day_result = day_origin + 1;
+        }else{
+            day_result = day_origin;
+        }
+
+        // get month
+        month_result = month_origin;
+
+        // get year and correct month
+        if (day_result == 29 && !isLeapYear(year_origin) && month_origin == 2){
+            day_result = 1;
+            month_result += 1;
+            year_result = year_origin;
+        }else if (day_result == 29 && isLeapYear(year_origin) && month_origin == 2){
+            //day_result = day_origin;
+        }else if (day_result == 31 && (month_result == 2 || month_result == 4 ||
+                                       month_result == 6 || month_result == 9 || month_result == 11)) {
+            day_result = 1;
+            month_result += 1;
+            year_result = year_origin;
+        }else if (day_result == 32 && (month_result == 1 || month_result == 3 ||
+                                       month_result == 5 || month_result == 7 || month_result == 8 ||
+                                       month_result == 10)) {
+            day_result = 1;
+            month_result += 1;
+            year_result = year_origin;
+        }else if (day_result == 32 && month_result == 12) {
+            day_result = 1;
+            month_result = 1;
+            year_result = year_origin + 1;
+        }
+        else{
+            year_result = year_origin;
+        }
+
+    }
+
+    else{
+        // time_result = time_origin - delta
+
+        // get sec
+        double sub_sec = sec_origin - sec;
+        if (sub_sec < 0.0){
+            sec_result = 60.0 + sub_sec;
+            min_result = min_origin - 1;
+        }else{
+            sec_result = sub_sec;
+            min_result = min_origin;
+        }
+
+        // get min
+        if (min_result < 0){
+            min_result += 60;
+            hour_result = hour_origin - 1;
+        }else{
+            hour_result = hour_origin;
+        }
+
+        // het hour
+        if (hour_result < 0){
+            hour_result += 24;
+            day_result = day_origin - 1;
+        }else{
+            day_result = day_origin;
+        }
+
+        // get month
+        month_result = month_origin;
+
+        // get day
+        if (day_result == 0 && month_result == 3 && isLeapYear(year_origin)){
+            day_result = 29;
+            month_result = 2;
+            year_result = year_origin;
+        }else if (day_result == 0 && month_result == 3 && !isLeapYear(year_origin)){
+            day_result = 28;
+            month_result = 2;
+            year_result = year_origin;
+        }else if (day_result == 0 && (month_result == 11 || month_result == 2 ||
+                                      month_result == 4 || month_result == 6 || month_result == 8 ||
+                                      month_result == 9)) {
+            // 2 4 6 8 9 11
+            day_result = 31;
+            month_origin -= 1;
+            year_result = year_origin;
+        }else if (day_result == 0 && (month_result == 3 || month_result == 5 ||
+                                      month_result == 7 || month_result == 10 || month_result == 12)) {
+            // 3 5 7 10 12
+            day_result = 30;
+            month_result -= 1;
+            year_result = year_origin;
+        }else if (day_result == 0 && month_result == 1){
+            // year -1
+            day_result = 31;
+            month_result = 12;
+            year_result = year_origin - 1;
+        }else{
+            year_result = year_origin;
+        }
+
+    }
+
+    get<0>(time_result) = year_result;
+    get<1>(time_result) = month_result;
+    get<2>(time_result) = day_result;
+    get<3>(time_result) = hour_result;
+    get<4>(time_result) = min_result;
+    get<5>(time_result) = sec_result;
+
+    return time_result;
 }

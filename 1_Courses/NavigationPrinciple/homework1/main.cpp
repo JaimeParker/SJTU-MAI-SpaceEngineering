@@ -12,7 +12,9 @@
 using namespace std;
 
 int main() {
-    TimeConversion timeConversion(2022, 9, 19, 10-8, 0, 0.0);
-    timeConversion.ShowAllTime();
+    TimeConversion timeConversion1(2022, 9, 19, 10, 0, 0.0);
+    timeConversion1.ShowAllTime();
+    TimeConversion timeConversion2(2000, 3, 1, 2, 0, 0);
+    timeConversion2.ShowAllTime();
     return 0;
 }

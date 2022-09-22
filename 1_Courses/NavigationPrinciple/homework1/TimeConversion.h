@@ -87,6 +87,8 @@ public:
     void ShowAllTime();
 
     static pair<int, int> getTimeWithinYear(pair<int, int> &time, int days, bool is_leap_year);
+
+    static Time TimeAddSubtractionNoZone(Time &time_origin, double sec, bool sign);
 };
 
 
