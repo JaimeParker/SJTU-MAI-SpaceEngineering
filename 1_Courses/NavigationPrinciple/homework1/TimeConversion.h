@@ -33,6 +33,10 @@ private:
     // https://en.wikipedia.org/wiki/Leap_second
     Vec2int leap_sec_vec;
 
+    //
+    pair<int, double> gps_time_week;
+    pair<int, double> bds_time_week;
+
 public:
     /**
      * construction function
@@ -66,6 +70,7 @@ public:
 
     /**
      * local time to UTC time
+     * actually TAI to UTC here
      */
     void LT2UTC();
 
@@ -89,6 +94,14 @@ public:
     static pair<int, int> getTimeWithinYear(pair<int, int> &time, int days, bool is_leap_year);
 
     static Time TimeAddSubtractionNoZone(Time &time_origin, double sec, bool sign);
+
+    void GPS2WeekFormat();
+
+    void BDS2WeekFormat();
+
+    void LT2UTCnew();
+
+    void UTC2TAI();
 };
 
 

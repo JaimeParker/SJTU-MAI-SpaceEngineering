@@ -23,10 +23,7 @@ TimeConversion::TimeConversion(int mYear, int mMonth, int mDay,
     get<4>(local_time) = mMin;
     get<5>(local_time) = mSec;
 
-    ia_time = TimeAddSubtraction(local_time, 32.184, false);
-
-    LT2GPS();
-    LT2BDS();
+//    ia_time = TimeAddSubtraction(local_time, 32.184, true);
 
     // insert leap second table
     leap_sec_vec = {
@@ -83,7 +80,14 @@ TimeConversion::TimeConversion(int mYear, int mMonth, int mDay,
             {2022, 0, 0}
     };
 
-    LT2UTC();
+    LT2UTCnew();
+    UTC2TAI();
+    LT2GPS();
+    LT2BDS();
+//    LT2UTC();
+
+    GPS2WeekFormat();
+    BDS2WeekFormat();
 }
 
 Time TimeConversion::TimeAddSubtraction(Time &time_origin, double sec, bool sign) {
@@ -236,6 +240,8 @@ Time TimeConversion::TimeAddSubtraction(Time &time_origin, double sec, bool sign
             day_result = 31;
             month_result = 12;
             year_result = year_origin - 1;
+        } else if (day_result == 29 && month_result == 2){
+            year_result = year_origin;
         }else{
             year_result = year_origin;
         }
@@ -284,7 +290,7 @@ void TimeConversion::LT2UTC() {
     }
     bias += leap_sec_vec[cor_x][cor_y] + 10;
 
-    utc_time = TimeAddSubtractionNoZone(ia_time, bias, false);
+    utc_time = TimeAddSubtractionNoZone(local_time, 0, false);
 }
 
 void TimeConversion::LT2GPS() {
@@ -322,6 +328,11 @@ void TimeConversion::ShowAllTime() {
     Show(bds_time);
     cout << setw(12) << "UTC time"<< ", ";
     Show(utc_time);
+    cout << setw(12) << "GPS in week" << ", ";
+    printf("%d weeks and %d seconds \n", gps_time_week.first, int(gps_time_week.second));
+    cout << setw(12) << "BDS in week" << ", ";
+    printf("%d weeks and %d seconds \n", bds_time_week.first, int(bds_time_week.second));
+    cout << endl;
 }
 
 TimeDay TimeConversion::thinking(TimeDay &timeDay, int days) {
@@ -534,6 +545,7 @@ Time TimeConversion::TimeAddSubtractionNoZone(Time &time_origin, double sec, boo
             year_result = year_origin;
         }else if (day_result == 29 && isLeapYear(year_origin) && month_origin == 2){
             //day_result = day_origin;
+            year_result = year_origin;
         }else if (day_result == 31 && (month_result == 2 || month_result == 4 ||
                                        month_result == 6 || month_result == 9 || month_result == 11)) {
             day_result = 1;
@@ -615,6 +627,8 @@ Time TimeConversion::TimeAddSubtractionNoZone(Time &time_origin, double sec, boo
             day_result = 31;
             month_result = 12;
             year_result = year_origin - 1;
+        } else if (day_result == 29 && month_result == 2){
+            year_result = year_origin;
         }else{
             year_result = year_origin;
         }
@@ -629,4 +643,201 @@ Time TimeConversion::TimeAddSubtractionNoZone(Time &time_origin, double sec, boo
     get<5>(time_result) = sec_result;
 
     return time_result;
+}
+
+void TimeConversion::GPS2WeekFormat() {
+    vector<PairDay> day_match, day_match_leap;
+
+    day_match = {
+            {1, 31},
+            {2, 28},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    day_match_leap = {
+            {1, 31},
+            {2, 29},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    int year = get<0>(gps_time);
+    int month = get<1>(gps_time);
+    int day = get<2>(gps_time);
+    int hour = get<3>(gps_time);
+    int min = get<4>(gps_time);
+    double sec = get<5>(gps_time);
+
+    // start from 1980 Jan 6th 0:00, 361 days remain for 1980
+    int sum_days = 361;
+    if (year > 1980){
+        for (int i = 1981; i < year; ++i){
+            if (isLeapYear(i)) sum_days += 366;
+            else sum_days += 365;
+//            cout << i << endl;
+        }
+
+    }else if(year < 1980){
+        cout << year << endl;
+        cout << "wrong time in year" << endl;
+        exit(100);
+    }
+
+    if(isLeapYear(year)){
+        int i = 0;
+        while (i + 1 < month) {
+            sum_days += day_match_leap[i].second;
+            i += 1;
+        }
+        sum_days += day-1;
+    }else{
+        int i = 0;
+        while (i + 1 < month) {
+            sum_days += day_match[i].second;
+            i += 1;
+        }
+        sum_days += day;
+    }
+    sum_days -= 1;
+
+    gps_time_week.first = sum_days / 7;
+
+    int day_remain = sum_days % 7;
+
+    double sum_sec = 0;
+
+
+    sum_sec = sec + min * 60 + hour * 3600 + day_remain * 24 * 3600;
+    gps_time_week.second = sum_sec;
+
+}
+
+void TimeConversion::BDS2WeekFormat() {
+    vector<PairDay> day_match, day_match_leap;
+
+    day_match = {
+            {1, 31},
+            {2, 28},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    day_match_leap = {
+            {1, 31},
+            {2, 29},
+            {3, 31},
+            {4, 30},
+            {5, 31},
+            {6, 30},
+            {7, 31},
+            {8, 31},
+            {9, 30},
+            {10, 31},
+            {11, 30},
+            {12, 31}
+    };
+
+    int year = get<0>(bds_time);
+    int month = get<1>(bds_time);
+    int day = get<2>(bds_time);
+    int hour = get<3>(bds_time);
+    int min = get<4>(bds_time);
+    double sec = get<5>(bds_time);
+
+    int sum_days = 0;
+
+    if (year > 2006){
+        for (int i = 2006; i < year; ++i){
+            if (isLeapYear(i)) sum_days += 366;
+            else sum_days += 365;
+        }
+    }else if(year < 2006){
+        cout << year;
+        cout << "wrong time in year" << endl;
+        exit(100);
+    }
+
+    if(isLeapYear(year)){
+        int i = 0;
+        while (i + 1 < month) {
+            sum_days += day_match_leap[i].second;
+            i += 1;
+        }
+        sum_days += day;
+    }else{
+        int i = 0;
+        while (i + 1 < month) {
+            sum_days += day_match[i].second;
+            i += 1;
+        }
+        sum_days += day;
+    }
+    sum_days -= 1;
+
+    bds_time_week.first = sum_days / 7;
+
+    int day_remain = sum_days % 7;
+
+    double sum_sec;
+
+    sum_sec = sec + min * 60 + hour * 3600 + day_remain * 24 * 3600;
+    bds_time_week.second = sum_sec;
+}
+
+void TimeConversion::LT2UTCnew() {
+    utc_time = TimeAddSubtraction(local_time, 0, false);
+}
+
+void TimeConversion::UTC2TAI() {
+    int year, month, day;
+    year = get<0>(utc_time);
+    month = get<1>(utc_time);
+    day = get<2>(utc_time);
+
+    int bias = 0;
+
+    int cor_x = 0, cor_y = 0;
+
+    // get cor y
+    if (month >= 1 && month <= 6){
+        cor_y = 1;
+    }else{
+        cor_y = 2;
+    }
+
+    // get cor x
+    cor_x = year - 1972;
+
+    // get bias
+    for (int i = 0; i < cor_x; i++ ){
+        bias += leap_sec_vec[i][1] + leap_sec_vec[i][2];
+    }
+    bias += leap_sec_vec[cor_x][cor_y] + 10;
+
+    ia_time = TimeAddSubtractionNoZone(utc_time, bias, true);
 }

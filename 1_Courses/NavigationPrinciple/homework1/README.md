@@ -34,6 +34,9 @@ $$
 \rm{TT} - 32.184s\\
 \end{cases}
 $$
+
+and local time + `time zone leap` = `UTC`, for China, `time zone leap` is 8 hours.
+
 to be advised, `leap second` is $37.0s$ currently;
 
 it's easy to get the answer with input `10:00 2022-9-19`, but it's a little complicated to realize a random time conversion.
@@ -152,22 +155,26 @@ for `2022-9-19-10:00:00`
 
 ```shell
 $/home/hazyparker/project/SJTU-MAI-SpaceEngineering/1_Courses/NavigationPrinciple/homework1/cmake-build-debug/homework1
-  local time, 2022- 9-19,  10:0:0
-     IA time, 2022- 9-19,  1:59:27.816
-    GPS time, 2022- 9-19,  1:59:8.816
-    BDS time, 2022- 9-19,  1:58:54.816
-    UTC time, 2022- 9-19,  1:58:50.816
+  local time, 2022- 9-19, 10:0:0
+     IA time, 2022- 9-19,  2:0:37
+    GPS time, 2022- 9-19,  2:0:18
+    BDS time, 2022- 9-19,  2:0:4
+    UTC time, 2022- 9-19,  2:0:0
+ GPS in week, 2228 weeks and 93618 seconds 
+ BDS in week, 872 weeks and 93604 seconds 
 ```
 
-for `2000-2-29-9:59:45`
+for `2012-3-1-7:00:00`
 
 ```shell
 $/home/hazyparker/project/SJTU-MAI-SpaceEngineering/1_Courses/NavigationPrinciple/homework1/cmake-build-debug/homework1
-  local time, 2000- 2-29,  9:59:45
-     IA time, 2000- 2-29,  1:59:12.816
-    GPS time, 2000- 2-29,  1:58:53.816
-    BDS time, 2000- 2-29,  1:58:39.816
-    UTC time, 2000- 2-29,  1:58:40.816
+  local time, 2012- 3- 1,  7:0:0
+     IA time, 2012- 2-29, 23:0:35
+    GPS time, 2012- 2-29, 23:0:16
+    BDS time, 2012- 2-29, 23:0:2
+    UTC time, 2012- 2-29, 23:0:0
+ GPS in week, 1677 weeks and 255616 seconds 
+ BDS in week, 321 weeks and 342002 seconds 
 ```
 
 
