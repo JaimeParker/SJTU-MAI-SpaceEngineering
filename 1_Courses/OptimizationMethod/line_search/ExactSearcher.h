@@ -1,10 +1,11 @@
 //
-// Created by hazyparker on 22-9-23.
+// Created by hazy parker on 22-9-23.
 //
 
 #ifndef LINE_SEARCH_EXACTSEARCHER_H
 #define LINE_SEARCH_EXACTSEARCHER_H
 
+enum ShowType {TYPE_HIDE = 0, TYPE_SHOW = 1};
 
 class ExactSearcher {
 private:
@@ -18,7 +19,11 @@ private:
     double precision;
 
     // define max iteration time
-    double max_iter;
+    int max_iter;
+
+    // define intervals
+    double left;
+    double right;
 
 public:
     // constructor function
@@ -27,12 +32,26 @@ public:
     // set function pointer
     void getFunctionPointer(double (*func)(double));
 
-    // set
+    /**
+     * allow user to update the maximum iteration time
+     * @param iter iteration time
+     */
     void getNewMaxIteration(int iter);
 
-    double GoldenSection(double x, double (*func)(double));
+    /**
+     * Golden Section method for line search;
+     * actually I'm using 0.618 method here;
+     * @param func  pointer to the function defined in main.cpp
+     * @return the estimated root
+     */
+    double GoldenSection(enum ShowType type = TYPE_HIDE);
 
-    void testPointer(double x);
+    // allow user to init the interval
+    void InitOriginalInterval(double left_interval, double right_interval);
+
+    // set precision
+    void InitPrecision(double accuracy);
+
 };
 
 
