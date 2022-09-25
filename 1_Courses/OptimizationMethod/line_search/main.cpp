@@ -4,10 +4,6 @@
 
 using namespace std;
 
-double test(double x){
-    return x+1;
-}
-
 double function1(double x) {
     return x * x - sin(x);
 }
