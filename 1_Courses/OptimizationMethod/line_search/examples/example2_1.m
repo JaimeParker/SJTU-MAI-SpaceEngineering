@@ -1,0 +1,1 @@
+[s,phis,k,G,E]=golds(inline('s^2-sin(s)'),0,1,1e-4,1e-5)

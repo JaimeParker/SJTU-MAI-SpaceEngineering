@@ -24,6 +24,7 @@ private:
     // define intervals
     double left;
     double right;
+    double middle;
 
 public:
     // constructor function
@@ -46,11 +47,19 @@ public:
      */
     double GoldenSection(enum ShowType type = TYPE_HIDE);
 
+    double QuadraticInterpolation(enum ShowType type = TYPE_HIDE);
+
     // allow user to init the interval
     void InitOriginalInterval(double left_interval, double right_interval);
 
+    // allow user to init the 3 element interval
+    void Init3Interval(double left_interval, double middle_interval,
+                       double right_interval);
+
     // set precision
     void InitPrecision(double accuracy);
+
+    void AutoSearchInterval();
 
 };
 

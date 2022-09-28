@@ -25,6 +25,7 @@ ExactSearcher::ExactSearcher() {
     // init the interval, can be revised by user
     left = -10;
     right = 10;
+    middle = 0;
 }
 
 void ExactSearcher::getFunctionPointer(double (*func)(double)) {
@@ -155,6 +156,147 @@ void ExactSearcher::InitOriginalInterval(double left_interval,
     right = right_interval;
 }
 
+void ExactSearcher::Init3Interval(double left_interval, double middle_interval,
+                                  double right_interval) {
+    left = left_interval;
+    middle = middle_interval;
+    right = right_interval;
+
+    if (!(left <= middle && middle <= right) ||
+    !(function(left) >= function(middle) && function(right) >= function(middle))) {
+        cout << "Bad input It's not qualified for Quadratic Interpolation!" << endl;
+        exit(100);
+    }
+}
+
 void ExactSearcher::InitPrecision(double accuracy) {
     precision = accuracy;
 }
+
+double ExactSearcher::QuadraticInterpolation(enum ShowType type) {
+    // define vector to restore data
+    vector<vector<double>> interval_list;
+    vector<double> list;  // used for store the data temporarily
+
+    // transfer data
+    double s0 = left;
+    double s1 = middle;
+    double s2 = right;
+    double phi0 = function(s0);
+    double phi1 = function(s1);
+    double phi2 = function(s2);
+
+    // set allowable error
+    double error = 0.0001;
+
+    //
+    double h = (s2 - s0) / 2;
+    double h_bar = (4*phi1 - 3*phi0 - phi2) * h / (2 * (2*phi1 - phi0 - phi2));
+    double s_bar, phi_bar, diff;
+    int iter = 0;
+
+    std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+    while (true){
+        iter += 1;
+        // write data to vector_list if user request SHOW type
+        if (type == TYPE_SHOW){
+            list.push_back(s0);
+            list.push_back(s1);
+            list.push_back(s2);
+            interval_list.push_back(list);
+            list.clear();
+        }
+
+        if (abs(s0 - s2) < error) break;
+        diff = abs(s0 - s2);
+        h = (s2 - s0) / 2.0;
+        h_bar = (4*phi1 - 3*phi0 - phi2) * h / (2 * (2*phi1 - phi0 - phi2));
+        s_bar = s0 + h_bar;
+        phi_bar = function(s_bar);
+        if (phi1 <= phi_bar){
+            // step 4
+            if (s1 <= s_bar) {
+                s2 = s_bar;
+                phi2 = phi_bar;
+            } else {
+                s0 = s_bar;
+                phi0 = phi_bar;
+            }
+        }
+        else {
+            // step 3
+            if (s1 <= s_bar){
+                s2 = s1;
+                s1 = s_bar;
+                phi2 = phi1;
+                phi1 = phi_bar;
+            } else {
+                s0 = s1;
+                s1 = s_bar;
+                phi0 = phi1;
+                phi1 = phi_bar;
+            }
+        }
+    }
+
+    // calculate time used
+    std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+    std::chrono::duration<double> time_used = std::chrono::duration_cast<
+            std::chrono::duration<double>>(t2 - t1);
+    std::cout << "time used: " << time_used.count() << "s" << std::endl;
+
+    cout << "the root is: " << s1 << endl;
+
+    // show the data processing
+    if (type == TYPE_SHOW) {
+        cout << endl << "Presenting the interval processing history:" << endl;
+        for (int j = 0; j <= iter; j++){
+            for (int k = 0; k <= 2; k++){
+                cout << setw(8) << interval_list[j][k] << ", ";
+            }
+            cout << endl;
+        }
+    }
+
+    return 0;
+}
+
+void ExactSearcher::AutoSearchInterval() {
+    double alpha0 = 1;
+    double h0 = 0.1;
+    int k = 0;
+    double phi0 = function(alpha0);
+
+    double alpha_k = alpha0;
+    double hk = h0;
+    double phi_k = phi0, phi_k1;
+    double alpha;
+
+    double alpha1 = alpha0 + h0;
+    while (true) {
+        // running step 2 now
+        phi_k1 = function(alpha_k + hk);
+        k += 1;
+        cout << "iter: " << k << endl;
+        if (phi_k1 < phi_k) {
+            phi_k = phi_k1;
+            alpha = alpha_k;
+            alpha_k += hk;
+            hk = hk * 2;
+        } else {
+            if (k == 0) {
+                hk = h0;
+                alpha = alpha1;
+                alpha1 = alpha0;
+                k = 1;
+            } else break;
+        }
+
+
+    }
+
+    cout << alpha <<  ", " <<alpha_k << endl;
+
+}
+
+
