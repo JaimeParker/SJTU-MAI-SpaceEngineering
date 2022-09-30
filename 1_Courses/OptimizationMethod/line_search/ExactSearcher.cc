@@ -250,7 +250,7 @@ double ExactSearcher::QuadraticInterpolation(enum ShowType type) {
     // show the data processing
     if (type == TYPE_SHOW) {
         cout << endl << "Presenting the interval processing history:" << endl;
-        for (int j = 0; j <= iter; j++){
+        for (int j = 0; j < iter; j++){
             for (int k = 0; k <= 2; k++){
                 cout << setw(8) << interval_list[j][k] << ", ";
             }
