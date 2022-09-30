@@ -34,6 +34,7 @@
 // automatic differentiation.
 #include "ceres/ceres.h"
 #include "glog/logging.h"
+#include <chrono>
 
 using ceres::AutoDiffCostFunction;
 using ceres::CostFunction;
@@ -60,6 +61,9 @@ int main(int argc, char** argv) {
     // mutated in place by the solver.
     double x = 0.5;
     const double initial_x = x;
+
+    std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+
     // Build the problem.
     Problem problem;
     // Set up the only cost function (also known as residual). This uses
@@ -74,5 +78,12 @@ int main(int argc, char** argv) {
     Solve(options, &problem, &summary);
     std::cout << summary.BriefReport() << "\n";
     std::cout << "x : " << initial_x << " -> " << x << "\n";
+
+    // calculate time used
+    std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+    std::chrono::duration<double> time_used = std::chrono::duration_cast<
+            std::chrono::duration<double>>(t2 - t1);
+    std::cout << "time used: " << time_used.count() << "s" << std::endl;
+
     return 0;
 }
