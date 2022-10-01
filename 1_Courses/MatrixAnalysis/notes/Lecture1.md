@@ -66,8 +66,6 @@ A subset of $V$ is a subspace precisely when it is closed under these two operat
 
 设$V_n(F)$为线性空间，$W$为$V$的非空子集合；若$W$的元素关于$V$中加法与数乘向量法运算也构成线性空间，则称$W$为$V$的一个子空间。
 
-
-
 而子集的包含关系使得$V_n(F)$的一个子集合是否为子空间的判别比较方便；
 
 **定理-子空间的充分必要条件**
@@ -78,6 +76,10 @@ A subset of $V$ is a subspace precisely when it is closed under these two operat
 * if $\alpha\in W, k\in F$, then $k\alpha\in W$
 
 必要性显然，则需证明其充分性（满足上述8个条件）；
+
+**Subsets:** 子集合
+
+**definition-Span:** The **span** of a set of vectors is the set of all linear combinations of the vectors.
 
 
 
