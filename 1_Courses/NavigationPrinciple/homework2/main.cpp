@@ -6,8 +6,9 @@
 
 int main() {
     CoordinateConvertor convertor;
-    convertor.getLLAParas(31.036, 121.455, 0);
-    convertor.Draw(31.036321, 121.455899, 100);
+    double d2r = 3.1415926/180;
+    convertor.getLLAParas(31.036*d2r, 121.455*d2r, 0);
+    convertor.Draw(31.036321*d2r, 121.455899*d2r, 100);
 
     std::cout << std::endl << "Program proceeded with success, quitting now..." << std::endl;
     return 0;
