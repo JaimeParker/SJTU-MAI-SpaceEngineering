@@ -189,3 +189,137 @@ by $f(x)=1/(1+x^2)$. Using piecewise linear interpolation to get the approximati
 ![2-7](2-7.png)
 
 It can be seen that Lagrange interpolation keeps a good tracing trend in the center area; Piecewise interpolation keeps a good trending in all area; 
+
+## Exercise 2.8
+
+Find the natural cubic spline through $(0,3), (1,-2), (2,1)$
+
+for 3 points, there are 2 cubics
+
+case 1: for $x\in[0,1)$
+$$
+\begin{align}
+
+S_0(x)
+
+& = a_0 + b_0(x-0) + c_0(x-0)^2 + d_0(x-0)^3\\
+
+& = a_0 + b_0x + c_0 x^2 + d_0 x^3\\
+
+\end{align}
+$$
+case 2: for $x\in[1,2]$
+$$
+S_1(x) = 
+
+a_1+b_1(x-1) + c_1(x-1)^2 + d_1(x-1)^3
+$$
+for several conditions:
+$$
+\begin{align}
+
+S_0(0) & = f(0) = 3\\
+
+S_1(1) & = S_0(1) = f(1) = -2\\
+
+S_0'(1) & = S_1'(1)\\
+
+S_0''(1) & = S_1''(1)\\
+
+S_0''(0) & = 0\\
+
+S_1''(2) & = 0
+
+\end{align}
+$$
+we can get that
+$$
+\begin{cases}
+
+a_0 = 3\\
+
+b_0 = -7\\
+
+c_0 = 0\\
+
+d_0 = 2\\
+
+a_1 = -2\\
+
+b_1 = -1\\
+
+c_1 = 6\\
+
+d_1 = -2
+
+\end{cases}
+$$
+so the equations by cubic spline should be:
+$$
+S(x)=
+
+\begin{cases}
+
+3-7x+2x^3 & x\in [0,1]\\
+
+-2 - (x-1) +6(x-1)^2 -2(x-1)^3 & x\in [1,2]\\
+
+\end{cases}
+$$
+
+## Exercise 2.9
+
+Decide whether or not the equations given below from a cubic spline
+$$
+(a) \quad S(x)=
+
+\begin{cases}
+
+x^3+x-1 &\text{on [0,1]}\\
+
+-(x-1)^3+3(x-1)^2+3(x-1)+1 &\text{on [1,2]}\\
+
+\end{cases}
+$$
+
+$$
+(b) \quad S(x)=
+
+\begin{cases}
+
+2x^3+x^2+4x+5 &\text{on [0,1]}\\
+
+(x-1)^3+7(x-1)^2+12(x-1)+12 &\text{on [1,2]}\\
+
+\end{cases}
+$$
+
+for equation `a`:
+
+* $S_0(x)=x^3+x-1$
+* $S_1(x)=-(x-1)^3+3(x-1)^2+3(x-1)+1$
+
+test all the conditions,
+$$
+\begin{align}
+S_0(1) = & 1,S_1(1) = 1,S_0(1)=S_1(1)\\
+S_0'(1) = &4, S_1'(1) = 3, S_0'(1)\neq S_1'(1)
+\end{align}
+$$
+so equation `a` is not from a cubic spline.
+
+for equation `b`:
+
+* $S_0(x)=2x^3+x^2+4x+5$
+* $S_1(x)=(x-1)^3+7(x-1)^2+12(x-1)+12$
+
+test all the conditions,
+$$
+\begin{align}
+S_0(1) = & 12,S_1(1) = 12,S_0(1)=S_1(1)\\
+S_0'(1) = &12, S_1'(1) = 12, S_0'(1)= S_1'(1)\\
+S_0''(1) = &14, S_1''(1) = 14, S_0'(1)= S_1'(1)\\
+\end{align}
+$$
+so equation `b` is from a cubic spline.
+

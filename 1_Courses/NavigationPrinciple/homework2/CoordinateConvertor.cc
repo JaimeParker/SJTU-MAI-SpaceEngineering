@@ -150,6 +150,6 @@ void CoordinateConvertor::Draw(double phi_p, double lambda_p, double h_p) const 
 
     cv::namedWindow("img", cv::WINDOW_NORMAL);
     cv::imshow("img", img);
-    cv::imwrite("../sky map.jpg", img);
+    //cv::imwrite("../sky map.jpg", img);
     cv::waitKey(0);
 }

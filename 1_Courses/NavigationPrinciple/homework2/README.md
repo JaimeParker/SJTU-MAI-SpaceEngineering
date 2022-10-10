@@ -15,7 +15,7 @@ where
 $$
 N(\phi)=\frac{a}{\sqrt{1-e^2\sin^2\phi}}
 $$
-set $A(31.036, 121.455, 0)$, the coordinate in `ECEF` is $(-2.86023*10^6, 5.1901*10^6, -2.35059*10^6)$
+set $A(31.036, 121.455, 0)$, the coordinate in `ECEF` is $(-2.8437*10^6, 4.66613*10^6, 3.26931*10^6)$
 
 ## ENU
 
