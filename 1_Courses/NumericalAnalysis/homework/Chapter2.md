@@ -323,3 +323,160 @@ S_0''(1) = &14, S_1''(1) = 14, S_0'(1)= S_1'(1)\\
 $$
 so equation `b` is from a cubic spline.
 
+## Exercise 2.12
+
+Find the least squares line approximating the data given in Table below:
+
+| $x$    | 1    | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10   |
+| ------ | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| $f(x)$ | 1.3  | 3.5  | 4.2  | 5.0  | 7.0  | 8.8  | 10.1 | 12.5 | 13.0 | 15.6 |
+
+first draw the scatter plot of points to choose model
+
+<img src="2-12-1.png" alt="2-12-1" style="zoom:72%;" />
+
+It can be seen that these points is basically linear, according to the least square method
+$$
+a_0=\cfrac{\sum_{i=0}^mx_i^2 \sum_{i=0}^m y_i^2 - \sum_{i=0}^mx_iy_i\sum_{i=0}^mx_i}
+{m(\sum_{i=0}^mx_i^2)-(\sum_{i=0}^mx_i)^2}
+$$
+
+$$
+a_1=\cfrac{m \sum_{i=0}^mx_iy_i - \sum_{i=0}^mx_i\sum_{i=0}^my_i}
+{m(\sum_{i=0}^m x_i^2)-(\sum_{i=0}^mx_i)^2}
+$$
+
+after calculating
+$$
+a_0 = \frac{-297}{825}=-0.36\\
+a_1=\frac{1269}{825}=1.5382
+$$
+so the line should be:
+$$
+y=-0.36+1.5382x
+$$
+
+## Exercise 2.13
+
+Find the discrete least square polynomial of degree at most 2 with the data given in Table below:
+
+| $x$     | 0       | 0.25       | 0.5        | 0.75        | 1.0        |
+| ------- | ---------- | ---------- | ---------- | ---------- | ---------- |
+| $f(x)$  | 1.0000 | 1.2840 | 1.6487  | 2.1170  | 2.7183     |
+
+after some data process
+$$
+\left[\begin{array}{c}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{m}
+\end{array}\right]=\left[\begin{array}{ccccc}
+1 & x_{1} & x_{1}{ }^{2} & \cdots & x_{1}{ }^{n} \\
+1 & x_{2} & x_{2}{ }^{2} & \cdots & x_{2}{ } \\
+\vdots & \vdots & \ddots & \vdots & \\
+1 & x_{m} & x_{m}{ }^{2} & \cdots & x_{m}{ }^{n}
+\end{array}\right]\left[\begin{array}{c}
+a_{0} \\
+a_{1} \\
+\vdots \\
+a_{n}
+\end{array}\right]
+$$
+according to matrix theory
+$$
+Y=Xa\\
+a=(X^TX)^{-1}X^TY
+$$
+for $n=1$:
+$$
+X=
+\begin{bmatrix}
+1&0\\
+1&0.25\\
+1&0.5\\
+1&0.75\\
+1&1
+\end{bmatrix},\quad
+a=\begin{bmatrix}
+0.89968\\
+1.70784
+\end{bmatrix}
+$$
+so the equation should be
+$$
+y=0.88968+1.70784x
+$$
+
+
+for $n=2$:
+$$
+X=
+\begin{bmatrix}
+1&0&0\\
+1&0.25&0.0625\\
+1&0.5&0.25\\
+1&0.75&0.5625\\
+1&1&1
+\end{bmatrix},\quad
+a=\begin{bmatrix}
+1.0051\\
+0.8642\\
+0.8437
+\end{bmatrix}
+$$
+so the equation should be
+$$
+y=1.0051+0.8642x+0.8437x^2
+$$
+<img src="2-13.png" alt="2-13" style="zoom:72%;" />
+
+It can be seen that the curve becomes more precise with higher m, but over-fitting is a problem
+
+## Exercise 2.14
+
+Find linear and quadratic least-squares approximations to $f(x)=e^x$ on $(-1,1)$ by using monomial polynomials(or naive polynomials)
+
+for quadratic approximation:
+
+using 9 points from -1 to 1, and the matrix $X$ will be
+$$
+X=\begin{bmatrix}
+ 1&     -1&      1    \\
+ 1&     -0.75&    0.5625\\
+ 1&     -0.5  &   0.25  \\
+ 1&     -0.25  &  0.0625\\
+ 1&      0    &  0    \\
+ 1&      0.25 &   0.0625\\
+ 1&      0.5  &   0.25  \\
+ 1&      0.75 &   0.5625\\
+ 1&      1   &   1    
+\end{bmatrix}
+$$
+the equation should be:
+$$
+y = 0.9948+1.1283x+0.5442x^2
+$$
+<img src="2-14-1.png" alt="2.14-1" style="zoom:72%;" />
+
+for linear approximation:
+
+the matrix $X$ will be
+$$
+X=\begin{bmatrix}
+ 1&     -1 \\
+ 1&     -0.75\\
+ 1&     -0.5  \\
+ 1&     -0.25  \\
+ 1&      0    \\
+ 1&      0.25 \\
+ 1&      0.5  \\
+ 1&      0.75 \\
+ 1&      1    
+\end{bmatrix}
+$$
+the equation should be:
+$$
+y=1.2215+1.1283x
+$$
+<img src="2-14-2.png" alt="2-14-2" style="zoom:72%;" />
