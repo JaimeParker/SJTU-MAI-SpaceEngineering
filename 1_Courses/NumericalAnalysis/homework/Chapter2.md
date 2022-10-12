@@ -439,44 +439,32 @@ Find linear and quadratic least-squares approximations to $f(x)=e^x$ on $(-1,1)$
 
 for quadratic approximation:
 
-using 9 points from -1 to 1, and the matrix $X$ will be
+for linear polynomial:
 $$
-X=\begin{bmatrix}
- 1&     -1&      1    \\
- 1&     -0.75&    0.5625\\
- 1&     -0.5  &   0.25  \\
- 1&     -0.25  &  0.0625\\
- 1&      0    &  0    \\
- 1&      0.25 &   0.0625\\
- 1&      0.5  &   0.25  \\
- 1&      0.75 &   0.5625\\
- 1&      1   &   1    
-\end{bmatrix}
+P_1(x)=a_0+a_1x
 $$
-the equation should be:
+there should be
 $$
-y = 0.9948+1.1283x+0.5442x^2
+a_0\int_{-1}^{1} 1{\rm d}x+a_1\int_{-1}^1x{\rm d}x=\int_{-1}^1e^x{\rm d}x\\
+a_0\int_{-1}^{1} x{\rm d}x+a_1\int_{-1}^1x^2{\rm d}x=\int_{-1}^1xe^x{\rm d}x
 $$
-<img src="2-14-1.png" alt="2.14-1" style="zoom:72%;" />
-
-for linear approximation:
-
-the matrix $X$ will be
+final is
 $$
-X=\begin{bmatrix}
- 1&     -1 \\
- 1&     -0.75\\
- 1&     -0.5  \\
- 1&     -0.25  \\
- 1&      0    \\
- 1&      0.25 \\
- 1&      0.5  \\
- 1&      0.75 \\
- 1&      1    
-\end{bmatrix}
+P_1(x)=-\frac{5e}{6}-\frac{9}{2e}+(\frac{4e}{3}-\frac{4}{e})x
 $$
-the equation should be:
+for quadratic polynomial:
 $$
-y=1.2215+1.1283x
+P_2(x)=a_0+a_1x+a_2x^2
 $$
-<img src="2-14-2.png" alt="2-14-2" style="zoom:72%;" />
+there should be:
+$$
+a_0\int_{-1}^{1} 1{\rm d}x+a_1\int_{-1}^1x{\rm d}x+a_2\int_{-1}^1x^2{\rm d}x=\int_{-1}^1e^x{\rm d}x\\
+a_0\int_{-1}^{1} x{\rm d}x+a_1\int_{-1}^1x^2{\rm d}x+a_2\int_{-1}^1x^3{\rm d}x=\int_{-1}^1xe^x{\rm d}x\\
+a_0\int_{-1}^{1} x^2{\rm d}x+a_1\int_{-1}^1x^3{\rm d}x+a_2\int_{-1}^1x^4{\rm d}x=\int_{-1}^1x^2e^x{\rm d}x\\
+$$
+final is
+$$
+a_0 = -0.6045e+4.0076e^{-1}\\
+a_1=0.5373e-0.8955e^{-1}\\
+a_2=1.7015e-10.8358e^{-1}
+$$
