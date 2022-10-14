@@ -1,0 +1,135 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+
+\begin{document}
+
+\title{Satellite Position Calculation\\
+{\footnotesize \textsuperscript{*}Note:
+homework 3 of Navigation Principle of SJTU}
+}
+
+\author{\IEEEauthorblockN{Liu Zhaohong}
+\IEEEauthorblockA{Student ID: 122431910061}
+}
+
+\maketitle
+
+\begin{abstract}
+Based on the Yuma and Rinex files, calculating satellite PRN-01’s position in both orbital and ECEF coordinates. Rinex file is version 2.
+\end{abstract}
+
+\begin{IEEEkeywords}
+orbit, satellite, position, SV, ECEF
+\end{IEEEkeywords}
+
+\section{Introduction}
+There are several key points. How to get useful information from `Yuma` file and `Rinex` data file? How to get satellite's SV position(or coordinate parameters) from these useful data? How to convert SV format position to ECEF format position(there should be a transformation matrix with 3 variables, 3 angles)
+
+\section{Read Yuma and Rinex Data}
+
+\subsection{Yuma Information}
+
+According to Yuma definition,
+\begin{itemize}
+	\item ID, PRN of the SVN, namely satellite ID of GPS satellites
+	\item Health
+	\item Eccentricity, which is $e$
+	\item Time of Applicability, the number of seconds in the orbit when the almanac was generated. Kind of a time tag
+	\item Orbital Inclination, The angle to which the SV orbit meets the equator (GPS is at approximately 55 degrees)
+	\item Argument of Perigee
+	\item Mean Anomaly
+	\item Week
+\end{itemize}
+
+\subsection{Rinex Information}
+
+too complex
+
+
+\section{Position Acquiring and Coordinate Converting}
+
+Once we know what we can acquire from the two data file, we shall consider how to use these data to realize our function.
+
+There are six parameters about the orbit, 3 about the satellite orbit and 3 about the coordinate conversion.
+
+\subsection{Position in Satellite Orbit}
+
+To describe a orbit, we need know the eccentricity, and a; also a Perigee degree to gain satellite's angle relative to the focal point.
+
+Based on Yuma data, we can get these,
+\begin{itemize}
+	\item $\sqrt{a}=5153.616211$
+	\item $e=0.01200914383$
+	\item $v=0.944318348 \quad \text{rad}$
+	\item $\Omega = 0.2426539643 \quad \text{rad}$
+	\item $i = 0.9889106755 \quad \text{rad}$
+	\item $\omega =  -0.7640576294 \quad \text{rad}$
+\end{itemize}
+
+Position in orbit coordinate has no $z$ axis values, because satellite move in a plane \textbf{XOY}. so we can get it's $x$ and $y$ by the $v$:
+
+\begin{equation}
+	\begin{cases}
+	x = r \cos v\\
+	y = r \sin v
+	\end{cases}
+\end{equation}
+
+and
+
+\begin{equation}
+r(v)=\frac{a(1-e^2)}{1+e\cos v}
+\end{equation}
+
+Then the $x$ and $y$ coordinate in satellite axis is acquired.
+
+\subsection{Coordinate Transformation}
+
+It is easy to get the position in satellite coordinate, so we will compose a way to convert position in satellite axis to ECEF.
+
+from SV ECEF to SV, it a process of 3 times rotation:
+\begin{itemize}
+	\item $\Omega$ around axis z
+	\item $i$ around axis x
+	\item $\omega$ around axis z
+\end{itemize}
+
+so it's not complex to get a rotation matrix form SV to ECEF, so as ECEF to SV.
+
+According to known formula on class,
+
+\begin{equation}
+X_T=
+	\begin{bmatrix}
+	x_p\cos\Omega_p - y_p\sin \Omega_p \cos i\\
+	x_p\sin\Omega_p + y_p\cos \Omega_p \sin i\\
+	y_p \sin i\\
+	\end{bmatrix}
+\end{equation}
+
+\subsection{Take Time into Consideration}
+
+setting time of Yuma as origin, time ascending will cause change in $v, \Omega, \omega$
+
+
+\begin{thebibliography}{00}
+\bibitem{b1}https://www.mathworks.com/matlabcentral/fileexchange/73873-satellite-orbit-coordinate-transformations
+\bibitem{b2}https://juliaspace.github.io/SatelliteToolbox.jl/stable/man/orbit/tle/
+\bibitem{b3}https://indico.ictp.it/event/a12180/session/14/contribution/8/material/0/0.pdf
+\bibitem{b4}https://celestrak.org/GPS/almanac/Yuma/definition.php
+\bibitem{b5}https://en.wikipedia.org/wiki/Ellipse
+\bibitem{b6}https://oc.sjtu.edu.cn/courses/47270/files/folder
+
+\end{thebibliography}
+
+\end{document}
