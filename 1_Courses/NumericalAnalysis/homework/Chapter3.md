@@ -59,17 +59,17 @@ and
 $$
 \int_0^1 \frac{x}{\ln(1+x)} {\rm d}x
 $$
-set $n=8$
+set $n=4$
 
 (**a**)
 
 For composite Trapezoidal rule
 $$
-\int_0^1 \frac{1}{1+x^3} {\rm d}x \approx 0.83466962
+\int_0^1 \frac{1}{1+x^3} {\rm d}x \approx 0.83170024
 $$
 For composite Simpson's rule
 $$
-\int_0^1 \frac{1}{1+x^3} {\rm d}x \approx 0.83556594
+\int_0^1 \frac{1}{1+x^3} {\rm d}x \approx 0.83578551
 $$
 (**b**) Note that
 $$
@@ -77,11 +77,11 @@ $$
 $$
 For composite Trapezoidal rule
 $$
-\int_0^1 \frac{x}{\ln(1+x)} {\rm d}x\approx1.22914661
+\int_0^1 \frac{x}{\ln(1+x)} {\rm d}x\approx1.228764875
 $$
 For composite Simpson's rule
 $$
-\int_0^1 \frac{x}{\ln(1+x)} {\rm d}x \approx 1.22927385
+\int_0^1 \frac{x}{\ln(1+x)} {\rm d}x \approx 1.22926996
 $$
 
 ## Exercise 3.4
@@ -114,7 +114,7 @@ which implies that
 $$
 n> \left( \frac{\pi^3}{12(0.00002)} \right)^{1/2} \approx359.44
 $$
-and the Composite Trapezoidal rule requires $n \geq 360$
+and the Composite Trapezoidal rule requires $n \geq 360$, $h \leq 0.0087$
 
 (**b**) The error form for the Composite Simpson's rule for $f(x) = \sin x$ on $[0, \pi]$ is
 $$
@@ -130,4 +130,4 @@ which implies that
 $$
 n> \left( \frac{\pi^5}{180(0.00002)} \right)^{1/2} \approx 17.07
 $$
-So, the Composite Simpson's rule requires only $n\geq 18$
+So, the Composite Simpson's rule requires only $n\geq 18$, $h\leq 0.1840$
