@@ -131,3 +131,38 @@ $$
 n> \left( \frac{\pi^5}{180(0.00002)} \right)^{1/2} \approx 17.07
 $$
 So, the Composite Simpson's rule requires only $n\geq 18$, $h\leq 0.1840$
+
+## Exercise 3.5
+
+Use *Adaptive Quadrature* to approximate the integral with `TOL`=0.005
+$$
+\int_{-1}^1(1+\sin(e^{3x})) {\rm d}x
+$$
+for Trapezoidal rule
+
+define $S[a,b]$ is the answer of trapezoidal rule on $[a,b]$, we can get
+
+* $S[-1,1]=2.994238$, $S[-1,0]=1.445619$, $S[0, 1]=1.892971$; error is $0.344352$
+* $S[-1,0]=1.445619$, $S[-1, -0.5]=0.567762$, $S[-0.5,0]=0.765689$; error is $0.112168$
+* $S[0,1]=1.892971$, $S[0,0.5]=0.466991$, $S[0.5,1]=0.492741$; error is $0.933239$
+
+for Simpson's rule
+
+* $S[-1,1]=3.453374$, $S[-1,0]=1.296062$, $S[0,1]=0.648653$; error is $1.508659$
+* $S[-1,0]=1.296062$, $S[-1, -0.5]=0.557656$, $S[-0.5, 0]=0.740228$; error is $0.001822$
+* $S[0,1]=0.648653$, $S[0,0.5]=0.773831$, $S[0.5,1]=0.476608$; error is $0.601787$
+
+## Exercise 3.7
+
+`Romberg`,n=3
+$$
+\int_1^2\ln x {\rm d}x
+$$
+
+```
+[[0.34657359 0.         0.        ]
+ [0.37601935 0.3858346  0.        ]
+ [0.38369951 0.38625956 0.38628789]]
+```
+
+ 

@@ -149,12 +149,106 @@ class NumericalIntegration:
 
         print(romberg_matrix)
 
+    def simpson(self, x_start, x_end):
+        a = x_start
+        b = x_end
+        h = (b - a) / 2
+
+        result = self.f(a) + self.f(b) + 4 * self.f(a + h)
+        result = h / 3 * result
+        return result
+
+    def trapezoidal(self, x_start, x_end):
+        a = x_start
+        b = x_end
+        h = (b - a) / 2
+
+        return h * (self.f(a) + self.f(b))
+
+    def adaptive_simpson(self, x_start, x_end, eps):
+        # reference
+        # https://en.wikipedia.org/wiki/Adaptive_Simpson%27s_method
+        # https://cloud.tencent.com/developer/article/1637426
+        # https://www.math.usm.edu/lambers/mat460/fall09/lecture30.pdf
+        a = x_start
+        b = x_end
+        m = (a + b) / 2
+
+        simpson_ans = self.simpson(a, b)
+        left = self.simpson(a, m)
+        right = self.simpson(m, b)
+        print("ans of simpson's method on [%f, %f] is %f" % (a, b, simpson_ans))
+        print("ans of simpson's method on [%f, %f] is %f" % (a, m, left))
+        print("ans of simpson's method on [%f, %f] is %f" % (m, b, right))
+        print("error is %f" % (abs(left + right - simpson_ans)))
+
+        # a traditional way is to replace 15 by 10
+        # to make the algorithm more conservative
+        # seems a serious bug due to no limitation
+        if abs(left + right - simpson_ans) <= 15 * eps:
+            print("[%f, %f] meet the error" % (a, b))
+            return left + right + (left + right - simpson_ans) / 15
+        else:
+            print("[%f, %f] exceed the error" % (a, b))
+            return self.adaptive_simpson(a, m, eps / 2) + \
+                self.adaptive_simpson(m, b, eps / 2)
+
+    def adaptive_trapezoidal(self, x_start, x_end, eps):
+        a = x_start
+        b = x_end
+        m = (a + b) / 2
+
+        trapezoidal_ans = self.trapezoidal(a, b)
+        left = self.trapezoidal(a, m)
+        right = self.trapezoidal(m, b)
+        print("ans of trapezoidal method on [%f, %f] is %f" % (a, b, trapezoidal_ans))
+        print("ans of trapezoidal method on [%f, %f] is %f" % (a, m, left))
+        print("ans of trapezoidal method on [%f, %f] is %f" % (m, b, right))
+        print("error is %f" % (abs(left + right - trapezoidal_ans)))
+
+        if abs(left + right - trapezoidal_ans) <= 15 * eps:
+            print("[%f, %f] meet the error" % (a, b))
+            return left + right + (left + right - trapezoidal_ans) / 15
+        else:
+            print("[%f, %f] exceed the error" % (a, b))
+            return self.adaptive_trapezoidal(a, m, eps / 2) + \
+                self.adaptive_trapezoidal(m, b, eps / 2)
+
+    def gaussian_legendre(self, x_start=-1, x_end=1):
+        # only design for n = 3(for now)
+        print(5 / 9 * self.f(0.774596692) + 8 / 9 * self.f(0) + 5 / 9 * self.f(-0.774596692))
+        return 5 / 9 * self.f(0.774596692) + 8 / 9 * self.f(0) + 5 / 9 * self.f(-0.774596692)
+
 
 def func(x):
     return math.sin(x)
 
 
-test = NumericalIntegration(func)
+def func3_5(x):
+    return 1 + math.sin(math.exp(3 * x))
 
-test.composite_newton_cotes(0, 3.1415 / 4, 8)
-test.romberg(0, 3.1415926, 6)
+
+def func3_7(x):
+    return math.log(x)
+
+
+def func3_8_1(x):
+    return math.exp(x)
+
+
+def func3_8_2(x):
+    return 0.5 * math.log((x + 3) / 2)
+
+
+test3_5 = NumericalIntegration(func3_5)
+test3_5.adaptive_trapezoidal(-1, 1, 0.005)
+test3_5.adaptive_simpson(-1, 1, 0.005)
+
+test3_7 = NumericalIntegration(func3_7)
+test3_7.romberg(1, 2, 3)
+
+test_3_8_1 = NumericalIntegration(func3_8_1)
+test_3_8_1.gaussian_legendre()
+
+test_3_8_2 = NumericalIntegration(func3_8_2)
+test_3_8_2.gaussian_legendre()
