@@ -1,1 +1,4 @@
-using `mosek` and `cvx` to solve a ?????? problem
+# homework 2
+
+use `mosek` to solve a `QP` convex problem?
+

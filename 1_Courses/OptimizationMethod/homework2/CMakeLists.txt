@@ -9,4 +9,7 @@ find_package(MOSEK)
 include_directories(${MOSEK_INCLUDE_DIRS})
 
 add_executable(homework2 main.cpp)
+add_executable(QuadConstrains src/ExampleQuadConstrains.cc)
+
 target_link_libraries(homework2 ${MOSEK_LIBRARIES})
+target_link_libraries(QuadConstrains ${MOSEK_LIBRARIES})
