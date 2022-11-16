@@ -49,4 +49,5 @@ int main(int argc, char ** argv)
     std::cout << "y1,y2,y3 = " << ylvl << std::endl;
     std::cout << "qc1 levels = " << qc1lvl << std::endl;
     std::cout << "qc1 dual conic var levels = " << qc1dl << std::endl;
+
 }

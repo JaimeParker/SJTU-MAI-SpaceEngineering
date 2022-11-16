@@ -120,7 +120,7 @@ int main(int argc, const char *argv[])
                  */
 
                 qsubi[0] = 0;   qsubj[0] = 0;  qval[0] = 2.0;
-                qsubi[1] = 1;   qsubj[1] = 1;  qval[1] = 0.2;
+                qsubi[1] = 1;   qsubj[1] = 1;  qval[1] = 0.15;
                 qsubi[2] = 2;   qsubj[2] = 0;  qval[2] = -1.0;
                 qsubi[3] = 2;   qsubj[3] = 2;  qval[3] = 2.0;
 
