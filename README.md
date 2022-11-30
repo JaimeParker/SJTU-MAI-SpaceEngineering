@@ -2,7 +2,7 @@
 Space Engineering Master program for SJTU-MAI, focusing on Information and Control.
 
 * host: me
-* collaborators: [sjYuxuan](https://github.com/sjYuxuan) and [SheepJB](https://github.com/SheepJB)
+* collaborators: [sjYuxuan](https://github.com/sjYuxuan),  [SheepJB](https://github.com/SheepJB) and [Yo-ru-shi-ka](https://github.com/Yo-ru-shi-ka)
 
 ## documents list
 
