@@ -80,6 +80,7 @@ carrier_Sin = [];
 
 fd = fd_Min:delta_Fd:fd_Max;
 
+
 n_Bins_Fd = length(fd);
 L = length(code_Out);
 
@@ -109,31 +110,31 @@ fprintf("The %d PRN's snr is %d, cn0 is %d \n",i,snr,cn0);
 
 % 3D CAF
 % figure
-% mesh((1:L),fd,caf);
-% set(gca, 'FontSize',12);
-% xlabel('$\bar{\tau}$','Interpreter','Latex','FontSize',20);
-% ylabel('${\bar{f_d}}$','Interpreter','Latex','FontSize',20)
-% zlabel('$\left|R(\bar{\tau},\bar{f_d})\right|^2$','Interpreter','Latex','FontSize',20)
-% % axis([0.001 0.01 fd(1) fd(end) 0 100000]);
-% str = ['CAF',num2str(i)];
-% title(['CAF',num2str(i)],'FontSize',18)
-% % saveas(gcf, str, 'fig');
-% saveas(gcf,['Figures/CAF',num2str(i)], 'png');
-% pause;
+mesh((1:L),fd * 2,caf);
+set(gca, 'FontSize',12);
+xlabel('$\bar{\tau}$','Interpreter','Latex','FontSize',20);
+ylabel('${\bar{f_d}}$','Interpreter','Latex','FontSize',20)
+zlabel('$\left|R(\bar{\tau},\bar{f_d})\right|^2$','Interpreter','Latex','FontSize',20)
+%axis([0.001 0.01 fd(1) fd(end) 0 100000]);
+str = ['CAF',num2str(i)];
+title(['CAF',num2str(i)],'FontSize',18);
+saveas(gcf, str, 'fig');
+saveas(gcf,['Figures/CAF',num2str(i)], 'png');
+%pause;
 % 
 % % 2D CAF - Code delay
 % figure
-% plot(caf(fd_Est,:));
-% set(gca, 'FontSize',12);
-% xlabel('$\bar{\tau}$','Interpreter','Latex','FontSize',20);
-% ylabel('$\left|R(\bar{\tau},\hat{f_d})\right|^2$','Interpreter','Latex','FontSize',20)
-% title('Code delay domain 2D CAF','FontSize',18);
-% saveas(gcf, 'Figures/PCAFCode', 'fig');
-% saveas(gcf, 'Figures/PCAFCode', 'png');
+%plot(caf(fd_Est,:));
+%set(gca, 'FontSize',12);
+%xlabel('$\bar{\tau}$','Interpreter','Latex','FontSize',20);
+%ylabel('$\left|R(\bar{\tau},\hat{f_d})\right|^2$','Interpreter','Latex','FontSize',20)
+%title('Code delay domain 2D CAF','FontSize',18);
+%saveas(gcf, 'Figures/PCAFCode', 'fig');
+%saveas(gcf, 'Figures/PCAFCode', 'png');
 % 
 % % 2D CAF - Doppler frequency
 % figure
- plot(fd,caf(:,tau_Est),'-*');
+ plot(fd,caf(:,tau_Est),'-o');
 %  pause;
 % set(gca, 'FontSize',12);
 % xlabel('$\bar{f_d}$','Interpreter','Latex','FontSize',20);
