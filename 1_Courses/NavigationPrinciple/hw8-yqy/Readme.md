@@ -1,0 +1,4 @@
+- download data file from convas
+- run Rinex_demo
+- run Singleposition
+- Via changing tk, in conjuntion with 22o's data in Singleposition, we can get diff outcome 
