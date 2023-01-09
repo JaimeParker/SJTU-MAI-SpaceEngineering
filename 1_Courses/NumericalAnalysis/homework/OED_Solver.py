@@ -62,6 +62,34 @@ class ODESolver:
             print("w%d = %f" % (index, w))
         return w
 
+    def modified_euler(self, init_y, start, end, num_step):
+        len_step = (end - start) / num_step
+        t = start
+        w = init_y
+
+        for i in range(num_step):
+            k0 = len_step * self.df(t, w)
+            k1 = len_step * self.df(t + len_step, w + k0)
+            w = w + (k0 + k1) / 2.0
+            t = t + len_step
+
+        return w
+
+    def runge_kutta_4(self, init_y, start, end, num_step):
+        len_step = (end - start) / num_step
+        t = start
+        w = init_y
+
+        for i in range(num_step):
+            k0 = len_step * self.df(t, w)
+            k1 = len_step * self.df(t + len_step / 2.0, w + k0 / 2.0)
+            k2 = len_step * self.df(t + len_step / 2.0, w + k1 / 2.0)
+            k3 = len_step * self.df(t + len_step, w + k2)
+            w = w + (k0 + 2.0 * k1 + 2.0 * k2 + k3) / 6.0
+            t = t + len_step
+
+        return w
+
 
 def func4_2(t, y):
     return y - t * t + 1
